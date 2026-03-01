@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__OutatimeTrace",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__OutatimeTrace",
+  "parent":{
+    "name":"Outatime",
+    "path":"folders/Extension/Outatime.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

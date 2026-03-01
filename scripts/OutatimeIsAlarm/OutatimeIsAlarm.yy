@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"OutatimeIsAlarm",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OutatimeIsAlarm",
+  "parent":{
+    "name":"Outatime",
+    "path":"folders/Extension/Outatime.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__OutatimeScopeExists",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__OutatimeScopeExists",
+  "parent":{
+    "name":"Outatime",
+    "path":"folders/Extension/Outatime.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

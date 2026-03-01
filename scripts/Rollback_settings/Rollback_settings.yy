@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Rollback_settings",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Rollback_settings",
+  "parent":{
+    "name":"Outatime",
+    "path":"folders/Extension/Outatime.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

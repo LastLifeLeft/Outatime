@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Network",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Network",
+  "parent":{
+    "name":"Outatime",
+    "path":"folders/Extension/Outatime.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

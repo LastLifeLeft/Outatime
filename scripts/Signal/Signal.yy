@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Signal",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Signal",
+  "parent":{
+    "name":"Signal",
+    "path":"folders/Extension/Signal.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,1 +1,0 @@
-oController.clock.AddTickMethod(someOtherFunction);

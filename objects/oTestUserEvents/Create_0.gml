@@ -1,1 +1,0 @@
-oController.clock.AddTickUserEvents(0, 1, 2);

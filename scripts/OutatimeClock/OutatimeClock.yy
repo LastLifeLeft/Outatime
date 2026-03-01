@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"OutatimeClock",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OutatimeClock",
+  "parent":{
+    "name":"Outatime",
+    "path":"folders/Extension/Outatime.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
