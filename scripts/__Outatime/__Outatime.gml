@@ -1,7 +1,7 @@
 // Feather disable all
 
-#macro __outatime_VERSION  "4.0.1"
-#macro __outatime_DATE	 "2024-03-21"
+#macro __outatime_VERSION  "0.0.1"
+#macro __outatime_DATE	 "2026-03-01"
 
 enum __outatime_CHILD
 {
@@ -34,7 +34,7 @@ function __outatime()
 	static _struct = undefined;
 	if (_struct != undefined) return _struct;
 	
-	__outatimeTrace("Welcome to Outatime by Juju Adams! This is version " + __outatime_VERSION + ", " + __outatime_DATE);
+	__outatimeTrace("Welcome to Outatime by ❤x1! This is version " + __outatime_VERSION + ", " + __outatime_DATE);
 	
 	_struct = {};
 	with(_struct)
