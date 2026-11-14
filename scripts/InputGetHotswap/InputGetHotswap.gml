@@ -4,7 +4,7 @@
 
 function InputGetHotswap()
 {
-	static _system = __InputSystem();
-	
-	return ((not INPUT_BAN_HOTSWAP) && _system.__hotswap);
+    static _system = __InputSystem();
+    
+    return ((not INPUT_BAN_HOTSWAP) && _system.__hotswap);
 }

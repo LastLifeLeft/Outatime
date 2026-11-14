@@ -8,6 +8,6 @@
 
 function InputDeviceGetPlayer(_device)
 {
-	static _deviceMap = __InputSystem().__deviceMap;
-	return _deviceMap[? _device];
+    static _deviceMap = __InputSystem().__deviceMap;
+    return _deviceMap[? _device];
 }

@@ -6,7 +6,7 @@
 
 function InputPlayerLowestConnectedIndex()
 {
-	static _system = __InputSystem();
-	
-	return _system.__lowestConnectedPlayerIndex;
+    static _system = __InputSystem();
+    
+    return _system.__lowestConnectedPlayerIndex;
 }

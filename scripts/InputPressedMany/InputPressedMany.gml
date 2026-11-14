@@ -10,49 +10,49 @@
 
 function InputPressedMany(_verbIndexArray, _playerIndexArray = 0)
 {
-	static _verbDefIndexArray = __InputSystem().__verbDefIndexArray;
-	static _playerArray = __InputSystemPlayerArray();
-	
-	//Convert `-1` to the array of all verb definitions
-	if (is_numeric(_verbIndexArray) && (_verbIndexArray == -1))
-	{
-		_verbIndexArray = _verbDefIndexArray;
-	}
-	
-	if (is_array(_verbIndexArray))
-	{
-		var _v = 0;
-		repeat(array_length(_verbIndexArray))
-		{
-			if (InputPressedMany(_verbIndexArray[_v], _playerIndexArray)) return true;
-			++_v;
-		}
-	}
-	else //not is_array(_verbIndexArray)
-	{
-		if (is_array(_playerIndexArray))
-		{
-			var _p = 0;
-			repeat(array_length(_playerIndexArray))
-			{
-				if (InputPressed(_verbIndexArray, _playerIndexArray[_p])) return true;
-				++_p;
-			}
-		}
-		else if (_playerIndexArray == -1)
-		{
-			var _playerIndex = 0;
-			repeat(INPUT_MAX_PLAYERS)
-			{
-				if (InputPressed(_verbIndexArray, _playerIndex)) return true;
-				++_playerIndex;
-			}
-		}
-		else
-		{
-			return InputPressed(_verbIndexArray, _playerIndexArray);
-		}
-	}
-	
-	return false;
+    static _verbDefIndexArray = __InputSystem().__verbDefIndexArray;
+    static _playerArray = __InputSystemPlayerArray();
+    
+    //Convert `-1` to the array of all verb definitions
+    if (is_numeric(_verbIndexArray) && (_verbIndexArray == -1))
+    {
+        _verbIndexArray = _verbDefIndexArray;
+    }
+    
+    if (is_array(_verbIndexArray))
+    {
+        var _v = 0;
+        repeat(array_length(_verbIndexArray))
+        {
+            if (InputPressedMany(_verbIndexArray[_v], _playerIndexArray)) return true;
+            ++_v;
+        }
+    }
+    else //not is_array(_verbIndexArray)
+    {
+        if (is_array(_playerIndexArray))
+        {
+            var _p = 0;
+            repeat(array_length(_playerIndexArray))
+            {
+                if (InputPressed(_verbIndexArray, _playerIndexArray[_p])) return true;
+                ++_p;
+            }
+        }
+        else if (_playerIndexArray == -1)
+        {
+            var _playerIndex = 0;
+            repeat(INPUT_MAX_PLAYERS)
+            {
+                if (InputPressed(_verbIndexArray, _playerIndex)) return true;
+                ++_playerIndex;
+            }
+        }
+        else
+        {
+            return InputPressed(_verbIndexArray, _playerIndexArray);
+        }
+    }
+    
+    return false;
 }

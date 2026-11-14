@@ -11,16 +11,16 @@
 
 function InputBindingGet(_forGamepad, _verbIndex, _alternate = 0, _playerIndex = 0)
 {
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	with(_playerArray[_playerIndex])
-	{
-		var _bindingArray = _forGamepad? __gamepadBindingArray : __kbmBindingArray;
-		var _alternateArray = _bindingArray[_verbIndex];
-		
-		if ((_alternate < 0) || (_alternate >= array_length(_alternateArray))) return undefined;
-		return _alternateArray[_alternate];
-	}
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    with(_playerArray[_playerIndex])
+    {
+        var _bindingArray = _forGamepad? __gamepadBindingArray : __kbmBindingArray;
+        var _alternateArray = _bindingArray[_verbIndex];
+        
+        if ((_alternate < 0) || (_alternate >= array_length(_alternateArray))) return undefined;
+        return _alternateArray[_alternate];
+    }
 }

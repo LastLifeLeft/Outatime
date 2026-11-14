@@ -9,9 +9,9 @@
 
 function InputDeviceGetSteamHandle(_device)
 {
-	static _gamepadArray = __InputSystem().__gamepadArray;
-	
-	if (_device < 0) return undefined;
-	
-	return InputDeviceIsConnected(_device)? _gamepadArray[_device].__steamHandle : undefined;
+    static _gamepadArray = __InputSystem().__gamepadArray;
+    
+    if (_device < 0) return undefined;
+    
+    return InputDeviceIsConnected(_device)? _gamepadArray[_device].__steamHandle : undefined;
 }

@@ -1,121 +1,124 @@
 // Feather disable all
 
 ////////////////////////////////////////////////////////////////////////////
-//																		//
+//                                                                        //
 // You're welcome to use any of the following macros in your game but ... //
-//																		//
-//					   DO NOT EDIT THIS SCRIPT						  //
-//					   Bad things might happen.						 //
-//																		//
-//		  Customisation options can be found in __InputConfig().		//
-//																		//
+//                                                                        //
+//                       DO NOT EDIT THIS SCRIPT                          //
+//                       Bad things might happen.                         //
+//                                                                        //
+//          Customisation options can be found in __InputConfig().        //
+//                                                                        //
 ////////////////////////////////////////////////////////////////////////////
 
-#macro INPUT_VERSION  "10.3.1"
-#macro INPUT_DATE	 "2026-02-27"
+#macro INPUT_VERSION  "10.5.0"
+#macro INPUT_DATE     "2026-09-29"
 
-#macro INPUT_NO_DEVICE	   -1
-#macro INPUT_KBM			 -100
-#macro INPUT_TOUCH		   -200
+#macro INPUT_NO_DEVICE       -1
+#macro INPUT_KBM             -100
+#macro INPUT_TOUCH           -200
 #macro INPUT_GENERIC_DEVICE  -300
 
 #macro INPUT_ALL_PLAYERS  -3
 
-#macro INPUT_GAMEPAD_TYPE_NO_GAMEPAD	0
-#macro INPUT_GAMEPAD_TYPE_UNKNOWN	   1
-#macro INPUT_GAMEPAD_TYPE_XBOX		  2
-#macro INPUT_GAMEPAD_TYPE_PS4		   3
-#macro INPUT_GAMEPAD_TYPE_PS5		   4
-#macro INPUT_GAMEPAD_TYPE_SWITCH		5
+#macro INPUT_GAMEPAD_TYPE_NO_GAMEPAD    0
+#macro INPUT_GAMEPAD_TYPE_UNKNOWN       1
+#macro INPUT_GAMEPAD_TYPE_XBOX          2
+#macro INPUT_GAMEPAD_TYPE_PS4           3
+#macro INPUT_GAMEPAD_TYPE_PS5           4
+#macro INPUT_GAMEPAD_TYPE_SWITCH        5
 #macro INPUT_GAMEPAD_TYPE_JOYCON_LEFT   6
 #macro INPUT_GAMEPAD_TYPE_JOYCON_RIGHT  7
 
 #macro INPUT_GAMEPAD_FALLBACK_TYPE  INPUT_GAMEPAD_TYPE_XBOX
 
 #macro INPUT_SUPPORT_GAMEPADS  (not INPUT_BAN_GAMEPADS)
-#macro INPUT_SUPPORT_KBM	   (not INPUT_BAN_KBM)
-#macro INPUT_SUPPORT_TOUCH	 (not INPUT_BAN_TOUCH)
+#macro INPUT_SUPPORT_KBM       (not INPUT_BAN_KBM)
+#macro INPUT_SUPPORT_TOUCH     (not INPUT_BAN_TOUCH)
 #macro INPUT_SUPPORT_HOTSWAP   (not INPUT_BAN_HOTSWAP)
 
 enum INPUT_PLAYER_STATUS
 {
-	DISCONNECTED,
-	NEWLY_DISCONNECTED,
-	NEWLY_CONNECTED,
-	CONNECTED,
+    DISCONNECTED,
+    NEWLY_DISCONNECTED,
+    NEWLY_CONNECTED,
+    CONNECTED,
 }
 
 enum INPUT_THRESHOLD
 {
-	LEFT,
-	RIGHT,
-	BOTH,
-	__SIZE,
+    LEFT,
+    RIGHT,
+    BOTH,
+    __SIZE,
 }
 
 enum INPUT_VIRTUAL_TYPE
 {
-	BUTTON,
-	DPAD_4DIR,
-	DPAD_8DIR,
-	DPAD_HORIZONTAL,
-	DPAD_VERTICAL,
-	THUMBSTICK,
-	TOUCHPAD,
+    BUTTON,
+    DPAD_4DIR,
+    DPAD_8DIR,
+    DPAD_HORIZONTAL,
+    DPAD_VERTICAL,
+    THUMBSTICK,
+    TOUCHPAD,
 }
 
 enum INPUT_VIRTUAL_REFERENCE
 {
-	CENTER,
-	TOUCH_POINT,
-	DELTA,
+    CENTER,
+    TOUCH_POINT,
+    DELTA,
 }
 
 enum INPUT_VIRTUAL_RELEASE
 {
-	DO_NOTHING,
-	DESTROY,
-	RESET_POSITION,
+    DO_NOTHING,
+    DESTROY,
+    RESET_POSITION,
 }
 
 enum INPUT_STEAM_INFO
 {
-	STEAMWORKS,
-	STEAM_DECK,
-	ON_WINE,
+    STEAMWORKS,
+    STEAM_DECK,
+    BIG_PICTURE,
+    ON_WINE,
 }
 
 enum INPUT_PLUG_IN_CALLBACK
 {
-	COLLECT,
-	UPDATE,
-	GAMEPAD_DISCONNECTED,
-	GAMEPAD_CONNECTED,
-	PLAYER_DEVICE_CHANGED,
-	COLLECT_PLAYER,
-	UPDATE_PLAYER,
-	LOSE_FOCUS,
-	GAIN_FOCUS,
-	GAME_RESTART,
-	FIND_BINDING_COLLISIONS,
-	__SIZE,
+    COLLECT,
+    UPDATE,
+    GAMEPAD_DISCONNECTED,
+    GAMEPAD_CONNECTED,
+    PLAYER_DEVICE_CHANGED,
+    COLLECT_PLAYER,
+    UPDATE_PLAYER,
+    LOSE_FOCUS,
+    GAIN_FOCUS,
+    GAME_RESTART,
+    FIND_BINDING_COLLISIONS,
+    __SIZE,
 }
 
 #macro INPUT_RUNNING_FROM_IDE  (GM_build_type == "run")
 
-#macro INPUT_ON_WINDOWS  (os_type == os_windows)
-#macro INPUT_ON_MACOS	(os_type == os_macosx)
-#macro INPUT_ON_LINUX	(os_type == os_linux)
-#macro INPUT_ON_IOS	  (os_type == os_ios || os_type == os_tvos)
-#macro INPUT_ON_ANDROID  (os_type == os_android)
-#macro INPUT_ON_XBOX	 ((os_type == os_xboxone) || (os_type == os_xboxseriesxs))
-#macro INPUT_ON_PS4	  (os_type == os_ps4)
-#macro INPUT_ON_PS5	  (os_type == os_ps5)
-#macro INPUT_ON_SWITCH   (os_type == os_switch)
-#macro INPUT_ON_CONSOLE  (INPUT_ON_XBOX || INPUT_ON_PS4 || INPUT_ON_PS5 || INPUT_ON_SWITCH)
-#macro INPUT_ON_APPLE	(INPUT_ON_MACOS || INPUT_ON_IOS)
-#macro INPUT_ON_OPERAGX  (os_type == os_operagx)
-#macro INPUT_ON_WEB	  ((os_browser != browser_not_a_browser) || INPUT_ON_OPERAGX)
+#macro INPUT_ON_WINDOWS   (os_type == os_windows)
+#macro INPUT_ON_MACOS     (os_type == os_macosx)
+#macro INPUT_ON_LINUX     (os_type == os_linux)
+#macro INPUT_ON_IOS       (os_type == os_ios || os_type == os_tvos)
+#macro INPUT_ON_ANDROID   (os_type == os_android)
+#macro INPUT_ON_XBOX      ((os_type == os_xboxone) || (os_type == os_xboxseriesxs))
+#macro INPUT_ON_PS4       (os_type == os_ps4)
+#macro INPUT_ON_PS5       (os_type == os_ps5)
+#macro INPUT_ON_SWITCH    (os_type == os_switch)
+#macro INPUT_ON_SWITCH_2  (os_type == os_switch2)
+#macro INPUT_ON_SWITCH_X  (INPUT_ON_SWITCH || INPUT_ON_SWITCH_2)
+#macro INPUT_ON_CONSOLE   (INPUT_ON_XBOX || INPUT_ON_PS4 || INPUT_ON_PS5 || INPUT_ON_SWITCH_X)
+#macro INPUT_ON_APPLE     (INPUT_ON_MACOS || INPUT_ON_IOS)
+#macro INPUT_ON_OPERAGX   (os_type == os_operagx)
+#macro INPUT_ON_WEB       ((os_browser != browser_not_a_browser) || INPUT_ON_OPERAGX)
 
 //Runtime on web, constant on native as of 2024.2
 //Tested and confirmed in VM bytecode disassembly
@@ -123,10 +126,10 @@ enum INPUT_PLUG_IN_CALLBACK
 #macro INPUT_ON_MOBILE   (INPUT_ON_ANDROID || INPUT_ON_IOS || (INPUT_ON_OPERAGX && __InputOnOperaGXMobile()))
 
 #macro INPUT_STEAMWORKS_SUPPORT   ((INPUT_ON_LINUX || INPUT_ON_WINDOWS) && (not INPUT_ON_WEB))
-#macro INPUT_SDL_SUPPORT		  ((not INPUT_ON_WEB) && INPUT_ON_DESKTOP)
+#macro INPUT_SDL_SUPPORT          ((not INPUT_ON_WEB) && INPUT_ON_DESKTOP)
 
-#macro INPUT_BAN_KBM	   (not INPUT_ON_DESKTOP)
-#macro INPUT_BAN_TOUCH	 (not INPUT_ON_MOBILE)
+#macro INPUT_BAN_KBM       (not INPUT_ON_DESKTOP)
+#macro INPUT_BAN_TOUCH     (not INPUT_ON_MOBILE)
 #macro INPUT_BAN_GAMEPADS  false
 #macro INPUT_BAN_HOTSWAP   (INPUT_ON_PS5 && INPUT_PS5_SINGLE_USER)
 
@@ -187,6 +190,6 @@ enum INPUT_PLUG_IN_CALLBACK
 // 32809 = gp_extra5
 // 32810 = gp_extra6
 
-#macro INPUT_GAMEPAD_BINDING_MIN	gp_face1
-#macro INPUT_GAMEPAD_BINDING_MAX	gp_extra6
+#macro INPUT_GAMEPAD_BINDING_MIN    gp_face1
+#macro INPUT_GAMEPAD_BINDING_MAX    gp_extra6
 #macro INPUT_GAMEPAD_BINDING_COUNT  (1 + INPUT_GAMEPAD_BINDING_MAX - INPUT_GAMEPAD_BINDING_MIN)

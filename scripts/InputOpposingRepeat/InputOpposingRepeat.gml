@@ -13,18 +13,18 @@
 
 function InputOpposingRepeat(_verbNeg, _verbPos, _playerIndex = 0, _delay = INPUT_REPEAT_DEFAULT_DELAY, _predelay = INPUT_REPEAT_DEFAULT_PREDELAY)
 {
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	if (InputCheck(_verbNeg, _playerIndex))
-	{
-		if (InputCheck(_verbPos, _playerIndex)) return 0;
-		
-		return -1*InputRepeat(_verbNeg, _playerIndex, _delay, _predelay);
-	}
-	else if (InputCheck(_verbPos, _playerIndex))
-	{
-		return InputRepeat(_verbPos, _playerIndex, _delay, _predelay);
-	}
-	
-	return 0;
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    if (InputCheck(_verbNeg, _playerIndex))
+    {
+        if (InputCheck(_verbPos, _playerIndex)) return 0;
+        
+        return -1*InputRepeat(_verbNeg, _playerIndex, _delay, _predelay);
+    }
+    else if (InputCheck(_verbPos, _playerIndex))
+    {
+        return InputRepeat(_verbPos, _playerIndex, _delay, _predelay);
+    }
+    
+    return 0;
 }

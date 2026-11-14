@@ -10,6 +10,6 @@
 
 function InputPlayerGetStatus(_playerIndex)
 {
-	static _playerArray = __InputSystemPlayerArray();
-	return _playerArray[_playerIndex].__status;
+    static _playerArray = __InputSystemPlayerArray();
+    return _playerArray[_playerIndex].__status;
 }

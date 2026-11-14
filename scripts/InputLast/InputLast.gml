@@ -10,38 +10,38 @@
 
 function InputLast(_verbIndexArray = -1, _playerIndex = 0)
 {
-	static _system			= __InputSystem();
-	static _playerArray	   = __InputSystemPlayerArray();
-	static _verbDefIndexArray = _system.__verbDefIndexArray;
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	//Convert `-1` to the array of all verb definitions
-	if (is_numeric(_verbIndexArray) && (_verbIndexArray == -1))
-	{
-		_verbIndexArray = _verbDefIndexArray;
-	}
-	
-	with(_playerArray[_playerIndex])
-	{
-		var _maxTime = -1;
-		var _maxVerb = undefined;
-		
-		var _i = 0;
-		repeat(array_length(_verbIndexArray))
-		{
-			var _verbIndex = _verbIndexArray[_i];
-			
-			var _verbState = __verbStateArray[_verbIndex];
-			if (_verbState.__pressFrame > _maxTime)
-			{
-				_maxTime = _verbState.__pressFrame;
-				_maxVerb = _verbIndex;
-			}
-			
-			++_i;
-		}
-		
-		return _maxVerb;
-	}
+    static _system            = __InputSystem();
+    static _playerArray       = __InputSystemPlayerArray();
+    static _verbDefIndexArray = _system.__verbDefIndexArray;
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    //Convert `-1` to the array of all verb definitions
+    if (is_numeric(_verbIndexArray) && (_verbIndexArray == -1))
+    {
+        _verbIndexArray = _verbDefIndexArray;
+    }
+    
+    with(_playerArray[_playerIndex])
+    {
+        var _maxTime = -1;
+        var _maxVerb = undefined;
+        
+        var _i = 0;
+        repeat(array_length(_verbIndexArray))
+        {
+            var _verbIndex = _verbIndexArray[_i];
+            
+            var _verbState = __verbStateArray[_verbIndex];
+            if (_verbState.__pressFrame > _maxTime)
+            {
+                _maxTime = _verbState.__pressFrame;
+                _maxVerb = _verbIndex;
+            }
+            
+            ++_i;
+        }
+        
+        return _maxVerb;
+    }
 }

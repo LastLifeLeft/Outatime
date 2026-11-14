@@ -9,13 +9,13 @@
 
 function InputDuration(_verbIndex, _playerIndex = 0)
 {
-	static _system	  = __InputSystem();
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	with(_playerArray[_playerIndex].__verbStateArray[_verbIndex])
-	{
-		return (_system.__frame - __pressFrame);
-	}
+    static _system      = __InputSystem();
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    with(_playerArray[_playerIndex].__verbStateArray[_verbIndex])
+    {
+        return (_system.__frame - __pressFrame);
+    }
 }

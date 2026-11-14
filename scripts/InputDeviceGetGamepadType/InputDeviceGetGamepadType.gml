@@ -15,9 +15,9 @@
 
 function InputDeviceGetGamepadType(_device)
 {
-	static _gamepadArray = __InputSystem().__gamepadArray;
-	
-	if (_device < 0) return INPUT_GAMEPAD_TYPE_NO_GAMEPAD;
-	
-	return InputDeviceIsConnected(_device)? _gamepadArray[_device].__type : INPUT_GAMEPAD_TYPE_NO_GAMEPAD;
+    static _gamepadArray = __InputSystem().__gamepadArray;
+    
+    if (_device < 0) return INPUT_GAMEPAD_TYPE_NO_GAMEPAD;
+    
+    return InputDeviceIsConnected(_device)? _gamepadArray[_device].__type : INPUT_GAMEPAD_TYPE_NO_GAMEPAD;
 }

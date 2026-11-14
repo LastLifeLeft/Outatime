@@ -4,8 +4,8 @@
 /// should be a member of the `INPUT_PLUG_IN_CALLBACK` enum.
 /// 
 /// N.B. Plug-ins may only register callbacks in the initialization callback defined by
-///	  `InputPlugInDefine()`. Calling `InputPlugInRegisterCallback()` outside of the
-///	  initialization callback with throw an error.
+///      `InputPlugInDefine()`. Calling `InputPlugInRegisterCallback()` outside of the
+///      initialization callback with throw an error.
 /// 
 /// You may also specify a callback priority. Because many callbacks can be registered to any
 /// particular callback type, and because code order might matter in some situations, it is useful
@@ -29,35 +29,35 @@
 /// multiple times a frame (for example, `.GAMEPAD_DISCONNECTED`). Some callbacks may be executed
 /// at different times depending on other factors - the table is a guide.
 /// 
-/// |Enum member			   |Purpose																						 |
+/// |Enum member               |Purpose                                                                                         |
 /// |--------------------------|------------------------------------------------------------------------------------------------|
-/// |`.COLLECT`				|Trigger the raw value collection for all players												|
-/// |`.COLLECT_PLAYER`		 |Reset and then collect raw values for each verb for a particular player						 |
-/// |`.UPDATE`				 |Updates the entire state of Input, including focus checks, gamepad state, and per-player updates|
-/// |`.LOSE_FOCUS`			 |Game window has lost focus																	  |
-/// |`.GAIN_FOCUS`			 |Game window has regained focus																  |
-/// |`.GAME_RESTART`		   |Game has been reset with `game_restart()`													   |
-/// |`.GAMEPAD_DISCONNECTED`   |Gamepad has been disconnected																   |
-/// |`.GAMEPAD_CONNECTED`	  |Gamepad has been connected																	  |
-/// |`.UPDATE_PLAYER`		  |Reset and then update state for every verb: press, press frame, held state, release			 |
-/// |`.PLAYER_DEVICE_CHANGED`  |Player changed what device they've been assigned, either due to a hotswap or manual set		 |
-/// |`.FIND_BINDING_COLLISIONS`|`InputBindingFind()` has been called															|
+/// |`.COLLECT`                |Trigger the raw value collection for all players                                                |
+/// |`.COLLECT_PLAYER`         |Reset and then collect raw values for each verb for a particular player                         |
+/// |`.UPDATE`                 |Updates the entire state of Input, including focus checks, gamepad state, and per-player updates|
+/// |`.LOSE_FOCUS`             |Game window has lost focus                                                                      |
+/// |`.GAIN_FOCUS`             |Game window has regained focus                                                                  |
+/// |`.GAME_RESTART`           |Game has been reset with `game_restart()`                                                       |
+/// |`.GAMEPAD_DISCONNECTED`   |Gamepad has been disconnected                                                                   |
+/// |`.GAMEPAD_CONNECTED`      |Gamepad has been connected                                                                      |
+/// |`.UPDATE_PLAYER`          |Reset and then update state for every verb: press, press frame, held state, release             |
+/// |`.PLAYER_DEVICE_CHANGED`  |Player changed what device they've been assigned, either due to a hotswap or manual set         |
+/// |`.FIND_BINDING_COLLISIONS`|`InputBindingFind()` has been called                                                            |
 /// 
 /// The method that you specify will be handed parameters, though what parameters specifically
 /// depends on the callback type:
 /// 
-/// |Enum member			   |Parameters																|
+/// |Enum member               |Parameters                                                                |
 /// |--------------------------|--------------------------------------------------------------------------|
-/// |`.COLLECT`				|(No parameters)														   |
-/// |`.UPDATE`				 |(No parameters)														   |
-/// |`.GAMEPAD_DISCONNECTED`   |Device index, hardware disconnected									   |
-/// |`.GAMEPAD_CONNECTED`	  |Device index															  |
-/// |`.PLAYER_DEVICE_CHANGED`  |Player index, old device index, new device index						  |
-/// |`.COLLECT_PLAYER`		 |Player index															  |
-/// |`.UPDATE_PLAYER`		  |Player index															  |
-/// |`.LOSE_FOCUS`			 |(No parameters)														   |
-/// |`.GAIN_FOCUS`			 |(No parameters)														   |
-/// |`.GAME_RESTART`		   |(No parameters)														   |
+/// |`.COLLECT`                |(No parameters)                                                           |
+/// |`.UPDATE`                 |(No parameters)                                                           |
+/// |`.GAMEPAD_DISCONNECTED`   |Device index, hardware disconnected                                       |
+/// |`.GAMEPAD_CONNECTED`      |Device index                                                              |
+/// |`.PLAYER_DEVICE_CHANGED`  |Player index, old device index, new device index                          |
+/// |`.COLLECT_PLAYER`         |Player index                                                              |
+/// |`.UPDATE_PLAYER`          |Player index                                                              |
+/// |`.LOSE_FOCUS`             |(No parameters)                                                           |
+/// |`.GAIN_FOCUS`             |(No parameters)                                                           |
+/// |`.GAME_RESTART`           |(No parameters)                                                           |
 /// |`.FIND_BINDING_COLLISIONS`|Collision array, for gamepad, binding, verb index, alternate, player index|
 /// 
 /// The `Hardware disconnected` parameter for the `.GAMEPAD_DISCONNECTED` will be set to `true` if
@@ -71,17 +71,17 @@
 
 function InputPlugInRegisterCallback(_callbackType, _priority = -1, _method)
 {
-	static _system = __InputSystem();
-	
-	if (_system.__plugInsInitializeState != 1)
-	{
-		__InputError("`InputPlugInRegisterCallback()` can only be called in a plug-in's initialization callback");
-	}
-	
-	if (_priority == 0)
-	{
-		__InputError("Cannot use priority 0 for plug-ins (reserved for internal code)");
-	}
-	
-	__InputPlugInRegisterCallbackInternal(_callbackType, _priority, _method);
+    static _system = __InputSystem();
+    
+    if (_system.__plugInsInitializeState != 1)
+    {
+        __InputError("`InputPlugInRegisterCallback()` can only be called in a plug-in's initialization callback");
+    }
+    
+    if (_priority == 0)
+    {
+        __InputError("Cannot use priority 0 for plug-ins (reserved for internal code)");
+    }
+    
+    __InputPlugInRegisterCallbackInternal(_callbackType, _priority, _method);
 }

@@ -48,81 +48,78 @@ __InputTrace("Done!");
 
 
 function __InputCompareVersions(_targetVersion, _actualVersion)
-{
-	_targetVersion = string(_targetVersion);
-	_actualVersion = string(_actualVersion);
-	
-	static _funcSplit = function(_versionString)
-	{
-		static _array = [];
-		array_resize(_array, 0);
-		
-		static _funcSafeReal = function(_string)
-		{
-			if (_string == "") return 0;
-			
-			try
-			{
-				var _value = real(_string);
-			}
-			catch(_error)
-			{
-				var _value = 0;
-			}
-			
-			return _value;
-		}
-		
-		var _struct = {
-			__major: 0,
-			__minor: 0,
-		};
-		
-		//Break down the string whilst also filtering out non-numeric characters (and period .)
-		string_foreach(_versionString, method({
-			__array: _array,
-		},
-		function(_char)
-		{
-			var _ord = ord(_char);
-			if (((_ord >= 48) && (_ord <= 57)) || (_ord == 46))
-			{
-				array_push(__array, _char);
-			}
-		}));
-		
-		//Find the major version - it's the number before the first dot
-		var _firstDotIndex = array_get_index(_array, ".");
-		if (_firstDotIndex < 0)
-		{
-			//If there's no dot then the whole thing is a version!
-			_struct.__major = _funcSafeReal(string_concat_ext(_array));
-		}
-		else
-		{
-			_struct.__major = _funcSafeReal(string_concat_ext(_array, 0, _firstDotIndex));
-			
-			var _secondDotIndex = array_get_index(_array, ".", _firstDotIndex + 1);
-			if (_secondDotIndex < _firstDotIndex)
-			{
-				_struct.__minor = _funcSafeReal(string_concat_ext(_array, _firstDotIndex+1));
-			}
-			else
-			{
-				_struct.__minor = _funcSafeReal(string_concat_ext(_array, _firstDotIndex+1, _secondDotIndex - _firstDotIndex - 1));
-			}
-		}
-		
-		array_resize(_array, 0);
-		
-		return _struct;
-	}
-	
-	var _targetStruct = _funcSplit(_targetVersion);
-	var _actualStruct = _funcSplit(_actualVersion);
-	
-	if (_targetStruct.__major != _actualStruct.__major) return false;
-	if (_targetStruct.__minor >  _actualStruct.__minor) return false;
-	
-	return true;
+{    
+    static _funcSplit = function(_versionString)
+    {
+        static _array = [];
+        array_resize(_array, 0);
+        
+        static _funcSafeReal = function(_string)
+        {
+            if (_string == "") return 0;
+            
+            try
+            {
+                var _value = real(_string);
+            }
+            catch(_error)
+            {
+                var _value = 0;
+            }
+            
+            return _value;
+        }
+        
+        var _struct = {
+            __major: 0,
+            __minor: 0,
+        };
+        
+        //Break down the string whilst also filtering out non-numeric characters (and period .)
+        string_foreach(_versionString, method({
+            __array: _array,
+        },
+        function(_char)
+        {
+            var _ord = ord(_char);
+            if (((_ord >= 48) && (_ord <= 57)) || (_ord == 46))
+            {
+                array_push(__array, _char);
+            }
+        }));
+        
+        //Find the major version - it's the number before the first dot
+        var _firstDotIndex = array_get_index(_array, ".");
+        if (_firstDotIndex < 0)
+        {
+            //If there's no dot then the whole thing is a version!
+            _struct.__major = _funcSafeReal(string_concat_ext(_array));
+        }
+        else
+        {
+            _struct.__major = _funcSafeReal(string_concat_ext(_array, 0, _firstDotIndex));
+            
+            var _secondDotIndex = array_get_index(_array, ".", _firstDotIndex + 1);
+            if (_secondDotIndex < _firstDotIndex)
+            {
+                _struct.__minor = _funcSafeReal(string_concat_ext(_array, _firstDotIndex+1));
+            }
+            else
+            {
+                _struct.__minor = _funcSafeReal(string_concat_ext(_array, _firstDotIndex+1, _secondDotIndex - _firstDotIndex - 1));
+            }
+        }
+        
+        array_resize(_array, 0);
+        
+        return _struct;
+    }
+    
+    var _targetStruct = _funcSplit(string(_targetVersion));
+    var _actualStruct = _funcSplit(string(_actualVersion));
+    
+    if (_targetStruct.__major != _actualStruct.__major) return false;
+    if (_targetStruct.__minor >  _actualStruct.__minor) return false;
+    
+    return true;
 }

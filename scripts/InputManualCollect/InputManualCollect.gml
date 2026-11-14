@@ -5,10 +5,10 @@
 
 function InputManualCollect()
 {
-	if (INPUT_COLLECT_MODE != 2)
-	{
-		__InputError("Cannot call InputManualCollect(), INPUT_COLLECT_MODE must be set to 2 (=", INPUT_COLLECT_MODE, ")");
-	}
-	
-	__InputCollect();
+    if (INPUT_COLLECT_MODE != 2)
+    {
+        __InputError("Cannot call InputManualCollect(), INPUT_COLLECT_MODE must be set to 2 (=", INPUT_COLLECT_MODE, ")");
+    }
+    
+    __InputCollect();
 }

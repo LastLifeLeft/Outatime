@@ -10,7 +10,7 @@
 /// no axis bias whatsoever.
 ///
 /// `axisBiasDiagonals` controls whether the axis bias should also allow diagonal inputs. It
-/// defaults to `false`: biasing will not select diagonal directioons. Setting this parameter to
+/// defaults to `false`: biasing will not select diagonal directions. Setting this parameter to
 /// `true` will allow diagonal directions.
 /// 
 /// @param {Enum.INPUT_CLUSTER,Real} clusterIndex
@@ -24,19 +24,40 @@
 
 function InputDefineCluster(_clusterIndex, _verbUp, _verbRight, _verbDown, _verbLeft, _axisBiasFactor = 0, _axisBiasDiagonals = false, _metadata = {})
 {
-	static _system = __InputSystem();
-	
-	if (GM_build_type == "run")
-	{
-		if not (_system.__verbDefineAllowed)
-		{
-			__InputError("InputDefineCluster() must only be called in __InputConfigVerbs()");
-		}
-	}
-	
-	with(_system)
-	{
-		var _definition = new __InputClassClusterDefinition(_clusterIndex, _verbUp, _verbRight, _verbDown, _verbLeft, _axisBiasFactor, _axisBiasDiagonals, _metadata);
-		__clusterDefinitionArray[@ _clusterIndex] = _definition;
-	}
+    static _system = __InputSystem();
+    
+    if (GM_build_type == "run")
+    {
+        if not (_system.__verbDefineAllowed)
+        {
+            __InputError("InputDefineCluster() must only be called in __InputConfigVerbs()");
+        }
+    }
+    
+    with(_system)
+    {
+        var _definition = new __InputClassClusterDefinition(_clusterIndex, _verbUp, _verbRight, _verbDown, _verbLeft, _axisBiasFactor, _axisBiasDiagonals, _metadata);
+        __clusterDefinitionArray[@ _clusterIndex] = _definition;
+        
+        //Keep track of what clusters a verb to assigned to
+        var _func = function(_clusterIndex, _verb)
+        {
+            var _verbToClusterArray = __verbToClusterMap[? _verb];
+            if (is_array(_verbToClusterArray))
+            {
+                array_push(_verbToClusterArray, _clusterIndex);
+            }
+            else
+            {
+                _verbToClusterArray = [_clusterIndex];
+                __verbToClusterMap[? _verb] = _verbToClusterArray;
+            }
+            
+        }
+        
+        _func(_clusterIndex, _verbUp);
+        _func(_clusterIndex, _verbRight);
+        _func(_clusterIndex, _verbDown);
+        _func(_clusterIndex, _verbLeft);
+    }
 }

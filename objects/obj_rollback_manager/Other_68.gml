@@ -33,17 +33,15 @@ for (var i = 0; i < array_length(_events); i++) {
 						break;
 						
 					case PAYLOAD.INPUT:
+						// The Step event imports the rest of the payload, then deletes it
 						var _frame = buffer_read(_payload, buffer_u32);
-						var _inputs = array_create(INPUT_VERB_COUNT);
-						for (var j = 0; j < INPUT_VERB_COUNT; j++) {
-							_inputs[j] = buffer_read(_payload, buffer_f32);
-						}
 						ds_queue_enqueue(message_queue, {
 							type: PAYLOAD.INPUT,
 							sender: _sender,
 							frame: _frame,
-							inputs: _inputs
+							payload: _payload
 						});
+						_payload = undefined;
 						break;
 						
 					case PAYLOAD.CHAT:
@@ -69,7 +67,7 @@ for (var i = 0; i < array_length(_events); i++) {
 						break;
 				}
 				
-				buffer_delete(_payload);
+				if (_payload != undefined) buffer_delete(_payload);
 			}
 			break;
 			

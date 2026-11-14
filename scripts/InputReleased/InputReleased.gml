@@ -7,12 +7,12 @@
 
 function InputReleased(_verb, _playerIndex = 0)
 {
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	with(_playerArray[_playerIndex].__verbStateArray[_verb])
-	{
-		return (__prevHeld && (not __held));
-	}
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    with(_playerArray[_playerIndex].__verbStateArray[_verb])
+    {
+        return (__prevHeld && (not __held));
+    }
 }

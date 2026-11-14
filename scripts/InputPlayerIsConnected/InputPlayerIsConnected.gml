@@ -8,12 +8,12 @@
 
 function InputPlayerIsConnected(_playerIndex = 0)
 {
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	with(_playerArray[_playerIndex])
-	{
-		return ((__status == INPUT_PLAYER_STATUS.NEWLY_CONNECTED) || (__status == INPUT_PLAYER_STATUS.CONNECTED));
-	}
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    with(_playerArray[_playerIndex])
+    {
+        return ((__status == INPUT_PLAYER_STATUS.NEWLY_CONNECTED) || (__status == INPUT_PLAYER_STATUS.CONNECTED));
+    }
 }

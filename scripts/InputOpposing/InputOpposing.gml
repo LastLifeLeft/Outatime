@@ -11,39 +11,39 @@
 
 function InputOpposing(_verbNeg, _verbPos, _playerIndex = 0, _mostRecent = INPUT_OPPOSING_DEFAULT_MOST_RECENT)
 {
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	var _heldNeg = InputCheck(_verbNeg, _playerIndex);
-	var _heldPos = InputCheck(_verbPos, _playerIndex);
-	
-	//Neither
-	if ((not _heldNeg) && (not _heldPos)) return 0;
-	
-	//Both
-	if (_heldNeg && _heldPos && (not _mostRecent)) return 0;
-		
-	//Exclusive
-	if (not _heldPos) return (_heldNeg? -1 : 0);
-	if (not _heldNeg) return (_heldPos?  1 : 0);
-	
-	with(_playerArray[_playerIndex])
-	{
-		//Grab player verb struct
-		var _verbStructNeg = __verbStateArray[_verbNeg];
-		var _verbStructPos = __verbStateArray[_verbPos];
-		
-		//Most recent
-		if (_verbStructNeg.__pressFrame > _verbStructPos.__pressFrame)
-		{
-			return (_heldNeg? -1 : 0);
-		}
-		else
-		{
-			return (_heldPos? 1 : 0);
-		}
-	}
-	
-	__InputError("Opposing check unhandled");
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    var _heldNeg = InputCheck(_verbNeg, _playerIndex);
+    var _heldPos = InputCheck(_verbPos, _playerIndex);
+    
+    //Neither
+    if ((not _heldNeg) && (not _heldPos)) return 0;
+    
+    //Both
+    if (_heldNeg && _heldPos && (not _mostRecent)) return 0;
+        
+    //Exclusive
+    if (not _heldPos) return (_heldNeg? -1 : 0);
+    if (not _heldNeg) return (_heldPos?  1 : 0);
+    
+    with(_playerArray[_playerIndex])
+    {
+        //Grab player verb struct
+        var _verbStructNeg = __verbStateArray[_verbNeg];
+        var _verbStructPos = __verbStateArray[_verbPos];
+        
+        //Most recent
+        if (_verbStructNeg.__pressFrame > _verbStructPos.__pressFrame)
+        {
+            return (_heldNeg? -1 : 0);
+        }
+        else
+        {
+            return (_heldPos? 1 : 0);
+        }
+    }
+    
+    __InputError("Opposing check unhandled");
 }

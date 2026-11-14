@@ -4,11 +4,11 @@
 
 function InputDeviceStopAllRebinding()
 {
-	var _array = InputDeviceEnumerate(false);
-	var _i = 0;
-	repeat(array_length(_array))
-	{
-		InputDeviceSetRebinding(_array[_i], false);
-		++_i;
-	}
+    var _array = InputDeviceEnumerate();
+    var _i = 0;
+    repeat(array_length(_array))
+    {
+        InputDeviceSetRebinding(_array[_i], false);
+        ++_i;
+    }
 }

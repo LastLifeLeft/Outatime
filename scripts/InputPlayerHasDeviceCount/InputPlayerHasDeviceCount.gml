@@ -6,16 +6,16 @@
 
 function InputPlayerHasDeviceCount()
 {
-	static _playerArray = __InputSystemPlayerArray();
-	
-	var _count = 0;
-	
-	var _i = 0;
-	repeat(INPUT_MAX_PLAYERS)
-	{
-		_count += (_playerArray[_i].__device != INPUT_NO_DEVICE);
-		++_i;
-	}
-	
-	return _count;
+    static _playerArray = __InputSystemPlayerArray();
+    
+    var _count = 0;
+    
+    var _i = 0;
+    repeat(INPUT_MAX_PLAYERS)
+    {
+        _count += (_playerArray[_i].__device != INPUT_NO_DEVICE);
+        ++_i;
+    }
+    
+    return _count;
 }

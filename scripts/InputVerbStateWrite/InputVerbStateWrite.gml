@@ -16,31 +16,31 @@
 
 function InputVerbStateWrite(_buffer, _playerIndex = 0)
 {
-	static _system = __InputSystem();
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	var _frame = _system.__frame;
-	var _verbCount = InputVerbCount();
-	
-	buffer_write(_buffer, buffer_string, __INPUT_VERB_STATE_HEADER);
-	buffer_write(_buffer, buffer_u16, _verbCount);
-	
-	var _verbStateArray = _playerArray[_playerIndex].__verbStateArray;
-	var _i = 0;
-	repeat(_verbCount)
-	{
-		with(_verbStateArray[_i])
-		{
-			buffer_write(_buffer, buffer_bool, __prevHeld);
-			buffer_write(_buffer, buffer_f32,  __valueRaw);
-			buffer_write(_buffer, buffer_f32,  __valueClamp);
-			buffer_write(_buffer, buffer_s32,  _frame - __pressFrame);
-		}
-		
-		++_i;
-	}
-	
-	buffer_write(_buffer, buffer_string, __INPUT_VERB_STATE_FOOTER);
+    static _system = __InputSystem();
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    var _frame = _system.__frame;
+    var _verbCount = InputVerbCount();
+    
+    buffer_write(_buffer, buffer_string, __INPUT_VERB_STATE_HEADER);
+    buffer_write(_buffer, buffer_u16, _verbCount);
+    
+    var _verbStateArray = _playerArray[_playerIndex].__verbStateArray;
+    var _i = 0;
+    repeat(_verbCount)
+    {
+        with(_verbStateArray[_i])
+        {
+            buffer_write(_buffer, buffer_bool, __prevHeld);
+            buffer_write(_buffer, buffer_f32,  __valueRaw);
+            buffer_write(_buffer, buffer_f32,  __valueClamp);
+            buffer_write(_buffer, buffer_s32,  _frame - __pressFrame);
+        }
+        
+        ++_i;
+    }
+    
+    buffer_write(_buffer, buffer_string, __INPUT_VERB_STATE_FOOTER);
 }

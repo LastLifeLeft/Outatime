@@ -4,10 +4,10 @@
 
 function __InputSystemCallbackArray()
 {
-	static _array = array_create_ext(INPUT_PLUG_IN_CALLBACK.__SIZE, function()
-	{
-		return [];
-	});
-	
-	return _array;
+    static _array = array_create_ext(INPUT_PLUG_IN_CALLBACK.__SIZE, function()
+    {
+        return [];
+    });
+    
+    return _array;
 }

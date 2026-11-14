@@ -38,22 +38,20 @@ if (connection_paused)
 // =============================================================================
 // PROCESS QUEUED NETWORK MESSAGES
 // =============================================================================
-var _need_rollback = false;
-var _rollback_target = global.absolute_frame;
 var _heard_from = array_create(player_count, false);
 _heard_from[local_player_index] = true;
-
-for (var p = 0; p < player_count; p++)
-{
-	rollback_trigger_players[p] = false;
-}
+var _deferred = [];
 
 while (!ds_queue_empty(message_queue))
 {
 	var _msg = ds_queue_dequeue(message_queue);
 	var _sender_index = array_get_index(global.relay_players, _msg.sender);
 	
-	if (_sender_index < 0 || _sender_index == local_player_index) continue;
+	if (_sender_index < 0 || _sender_index == local_player_index)
+	{
+		if (_msg.type == PAYLOAD.INPUT) buffer_delete(_msg.payload);
+		continue;
+	}
 	
 	_heard_from[_sender_index] = true;
 	ticks_since_message[_sender_index] = 0;
@@ -69,69 +67,46 @@ while (!ds_queue_empty(message_queue))
 			
 		case PAYLOAD.INPUT:
 			var _frame = _msg.frame;
-			var _inputs = _msg.inputs;
-			var _buffer_index = _frame % ROLLBACK_DEPTH;
-	
-			// Fill in any gaps by copying from the last known input
-			var _last = last_input_frame[_sender_index];
-			if (_last >= 0 && _frame > _last + 1)
+			
+			// Storing input further ahead would push frames we may roll back to out of the buffer
+			if (_frame > global.absolute_frame + ROLLBACK_INPUT_LEAD)
 			{
-				var _gap_start = max(_last + 1, _frame - ROLLBACK_DEPTH + 1);
-				var _gap_end = _frame - 1;
-				var _src_index = _last % ROLLBACK_DEPTH;
-		
-				for (var f = _gap_start; f <= _gap_end; f++) {
-					var _dst_index = f % ROLLBACK_DEPTH;
-					for (var i = 0; i < INPUT_VERB_COUNT; i++) {
-						global.input_buffer[_dst_index][_sender_index][i] = 
-							global.input_buffer[_src_index][_sender_index][i];
-					}
-				}
+				array_push(_deferred, _msg);
+				break;
 			}
-	
-			// Store actual input
-			for (var i = 0; i < INPUT_VERB_COUNT; i++)
+			
+			// Frames after it are predicted again; a misprediction on a simulated frame is reported below
+			if (InputCircularBufferImport(_msg.payload, _sender_index) == undefined)
 			{
-				global.input_buffer[_buffer_index][_sender_index][i] = _inputs[i];
+				show_debug_message(debug_id + "Input from " + string(_sender_index) + " frame=" + string(_frame)
+					+ " left the buffer (oldest=" + string(InputCircularBufferGetOldestFrame()) + ")");
 			}
-	
-			if (_frame > last_input_frame[_sender_index])
-			{
-				last_input_frame[_sender_index] = _frame;
-			}
+			buffer_delete(_msg.payload);
+			
 			if (_frame > last_heard_frame[_sender_index])
 			{
 				last_heard_frame[_sender_index] = _frame;
 			}
-	
-			// Check rollback - mark this player as a trigger
-			if (_frame < global.absolute_frame)
-			{
-				// Add this right before line 337 (_need_rollback = true):
-				show_debug_message(debug_id + "ROLLBACK TRIGGER: sender=" + string(_sender_index) + 
-					" input_frame=" + string(_frame) + 
-					" absolute_frame=" + string(global.absolute_frame) + 
-					" last_input_frame=" + string(last_input_frame[_sender_index]) + 
-					" last_heard_frame=" + string(last_heard_frame[_sender_index]) +
-					" gap=" + string(_frame - last_input_frame[_sender_index]));
-					
-				_need_rollback = true;
-				_rollback_target = min(_rollback_target, _frame);
-				rollback_trigger_players[_sender_index] = true;
-			}
 			
-			show_debug_message(debug_id + "RX INPUT from " + string(_sender_index) + " frame=" + string(_frame) + " (current=" + string(global.absolute_frame) + ")" + " rollback=" + string(_need_rollback));
+			show_debug_message(debug_id + "RX INPUT from " + string(_sender_index) + " frame=" + string(_frame) + " (current=" + string(global.absolute_frame) + ")");
 			break;
 	}
+}
+
+for (var i = 0; i < array_length(_deferred); i++)
+{
+	ds_queue_enqueue(message_queue, _deferred[i]);
 }
 
 // =============================================================================
 // PERFORM ROLLBACK BEFORE SIMULATING NEW TICKS
 // =============================================================================
 var _ticks_executed = 0;
+var _rollback_target = InputCircularBufferGetChangedFrame();
 
-if (_need_rollback) {
-	var _min_valid_frame = global.absolute_frame - ROLLBACK_DEPTH + 1;
+if (_rollback_target != undefined) {
+	InputCircularBufferClearChangedFrame();
+	var _min_valid_frame = max(global.absolute_frame - ROLLBACK_DEPTH + 1, InputCircularBufferGetOldestFrame());
 	
 	show_debug_message(debug_id + "ROLLBACK CHECK: target=" + string(_rollback_target) + 
 		" current=" + string(global.absolute_frame) + 
@@ -154,6 +129,9 @@ else
 	_ticks_executed = global.rollback_clock.Update();
 }
 
+// Outside of ticks, Input returns live device state
+InputCircularBufferSeek(undefined);
+
 // =============================================================================
 // TIMEOUT TRACKING (only after ticks run)
 // =============================================================================
@@ -169,7 +147,7 @@ if (_ticks_executed > 0) {
 		if (ticks_since_message[p] >= ROLLBACK_STALL_THRESHOLD) {
 			show_debug_message(debug_id + "ROLLBACK: Connection stalled for player " + string(p) + 
 				" last_heard=" + string(last_heard_frame[p]) +
-				" last_input=" + string(last_input_frame[p]));;
+				" last_input=" + string(InputCircularBufferGetConfirmedFrame(p)));
 			global.rollback_clock.SetPause(true);
 			connection_paused = true;
 			pause_timer = 0;

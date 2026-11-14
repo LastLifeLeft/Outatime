@@ -21,32 +21,21 @@ global.absolute_frame = 0;
 global.rollbacking = 0;
 global.rollback_tick_frame = 0;
 resimulating = false;
-rollback_trigger_players = array_create(player_count, false);
 
 // =============================================================================
-// INPUT BUFFER: [buffer_index][player_index][input_index]
+// INPUT: Input's Circular Buffer plug-in, seat p = Input player p
 // =============================================================================
-global.input_buffer = [];
-for (var i = 0; i < ROLLBACK_DEPTH; i++) {
-	global.input_buffer[i] = [];
-	for (var j = 0; j < player_count; j++) {
-		global.input_buffer[i][j] = array_create(INPUT_VERB_COUNT, 0);
-	}
-}
+// Remote seats are ghosts. Their input is imported as it arrives and predicted until then
+rollback_input_begin(player_count, local_player_index);
+
+input_packet = buffer_create(4 + InputCircularBufferExportByteLength(), buffer_fixed, 1);
+last_sent_verbs = "";
 
 // =============================================================================
 // PER-PLAYER NETWORK TRACKING
 // =============================================================================
-// Stores the absolute frame number of the last confirmed input for each player
-last_confirmed_frame = array_create(player_count, -1);
-last_confirmed_frame[local_player_index] = ROLLBACK_INPUT_DELAY;
-
 ticks_since_message = array_create(player_count, -ROLLBACK_GRACE_PERIOD);
 ticks_since_message[local_player_index] = 0;
-
-// Last frame we received ACTUAL INPUT for (used for prediction)
-last_input_frame = array_create(player_count, -1);
-last_input_frame[local_player_index] = ROLLBACK_INPUT_DELAY;
 
 // Last frame we heard from them at all (used for timeout)
 last_heard_frame = array_create(player_count, -1);
@@ -88,65 +77,21 @@ global.rollback_clock.AddBeginTickMethod(function()
 	global.rollback_tick_frame = _current_frame;
 		
 	// =================================================================
-	// SAVE RNG STATE (only during normal play)
+	// SAVE RNG STATE, CAPTURE AND SEND LOCAL INPUT (only during normal play)
 	// =================================================================
 	if (!resimulating) {
 		rng_state_buffer[_current_buffer_index] = rollback_random_get_state();
-	}
 		
-	// =================================================================
-	// PREDICT REMOTE INPUTS
-	// =================================================================
-	for (var p = 0; p < player_count; p++) {
-		if (p == local_player_index) continue;
-	
-		// During resim, only predict for players who triggered the rollback
-		if (resimulating && !rollback_trigger_players[p]) continue;
-	
-		if (last_input_frame[p] < _current_frame) {
-			var _prev_buffer_index = (_current_frame - 1 + ROLLBACK_DEPTH) % ROLLBACK_DEPTH;
-		
-			for (var i = 0; i < INPUT_VERB_COUNT; i++) {
-				global.input_buffer[_current_buffer_index][p][i] = global.input_buffer[_prev_buffer_index][p][i];
-			}
-		}
-	}
-		
-	// =================================================================
-	// CAPTURE AND SEND LOCAL INPUT (only during normal play)
-	// =================================================================
-	if (!resimulating) {
 		var _input_frame = _current_frame + ROLLBACK_INPUT_DELAY;
-		var _input_buffer_index = _input_frame % ROLLBACK_DEPTH;
-		var _prev_input_buffer_index = (_input_frame - 1 + ROLLBACK_DEPTH) % ROLLBACK_DEPTH;
-			
-		var _input_changed = false;
-			
-		for (var i = 0; i < INPUT_VERB_COUNT; i++) {
-			var _val = InputCheck(i, 0);
-				
-			if (_val != global.input_buffer[_prev_input_buffer_index][local_player_index][i]) {
-				_input_changed = true;
-			}
-				
-			global.input_buffer[_input_buffer_index][local_player_index][i] = _val;
-				
-			
-		}
-			
-		last_confirmed_frame[local_player_index] = _input_frame;
-			
-		if (_input_changed) {
-			ticks_since_input_sent = 0;
-			send_input(_input_frame);
-		} else {
-			ticks_since_input_sent++;
-			if (ticks_since_input_sent >= 5) {
-				ticks_since_input_sent = 0;
-				send_heartbeat(_input_frame);
-			}
-		}
+		InputCircularBufferRecord(_input_frame, local_player_index);
+		send_local_input(_input_frame);
 	}
+	
+	// =================================================================
+	// BROWSE INPUT TO THIS FRAME
+	// =================================================================
+	// Input's checkers now return this frame's input, remote seats predicted until their input arrives
+	InputCircularBufferSeek(_current_frame);
 });
 
 // Frame counter advances AFTER all tick logic completes
@@ -160,22 +105,25 @@ global.rollback_clock.AddEndTickMethod(function()
 // HELPER FUNCTIONS
 // =============================================================================
 
-function send_input(_frame) {
-	var _buffer = buffer_create(4 + INPUT_VERB_COUNT * 4, buffer_fixed, 1);
-	buffer_write(_buffer, buffer_u32, _frame);
+// Sends local input for a given frame when it changed, a heartbeat every 5 unchanged frames
+function send_local_input(_frame) {
+	buffer_seek(input_packet, buffer_seek_start, 0);
+	buffer_write(input_packet, buffer_u32, _frame);
+	InputCircularBufferExport(input_packet, _frame, local_player_index);
 	
-	var _buffer_index = _frame % ROLLBACK_DEPTH;
-	for (var i = 0; i < INPUT_VERB_COUNT; i++) {
-		buffer_write(_buffer, buffer_f32, global.input_buffer[_buffer_index][local_player_index][i]);
+	// The verbs follow the frame and Export's 7-byte header
+	var _verbs = buffer_md5(input_packet, 11, buffer_tell(input_packet) - 11);
+	if (_verbs != last_sent_verbs) {
+		last_sent_verbs = _verbs;
+		ticks_since_input_sent = 0;
+		relay_send(input_packet, PAYLOAD.INPUT);
+		last_heard_frame[local_player_index] = _frame;
+		
+		show_debug_message("TX INPUT frame=" + string(_frame));
+	} else if (++ticks_since_input_sent >= 5) {
+		ticks_since_input_sent = 0;
+		send_heartbeat(_frame);
 	}
-	
-	relay_send(_buffer, PAYLOAD.INPUT);
-	buffer_delete(_buffer);
-	
-	last_input_frame[local_player_index] = _frame;
-	last_heard_frame[local_player_index] = _frame;
-	
-	show_debug_message("TX INPUT frame=" + string(_frame));
 }
 
 function send_heartbeat(_frame) {
@@ -212,10 +160,6 @@ function perform_rollback(_target_frame) {
 	resimulating = false;
 	
 	global.rollbacking = 0;
-	for (var p = 0; p < player_count; p++)
-	{
-		rollback_trigger_players[p] = false;
-	}
 }
 
 display_position = function()

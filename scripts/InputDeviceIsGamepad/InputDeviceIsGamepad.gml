@@ -7,5 +7,5 @@
 
 function InputDeviceIsGamepad(_device)
 {
-	return (_device >= 0);
+    return (_device >= 0);
 }

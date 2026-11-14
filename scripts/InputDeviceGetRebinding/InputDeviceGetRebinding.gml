@@ -6,6 +6,6 @@
 
 function InputDeviceGetRebinding(_device)
 {
-	static _rebindingMap = __InputSystem().__rebindingMap;
-	return _rebindingMap[? _device] ?? false;
+    static _rebindingMap = __InputSystem().__rebindingMap;
+    return is_struct(_rebindingMap[? _device]);
 }

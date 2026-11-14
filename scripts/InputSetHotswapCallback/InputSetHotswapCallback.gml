@@ -6,8 +6,8 @@
 
 function InputSetHotswapCallback(_callback)
 {
-	static _system = __InputSystem();
-	
-	if (INPUT_BAN_HOTSWAP) return;
-	_system.__hotswapCallback = _callback;
+    static _system = __InputSystem();
+    
+    if (INPUT_BAN_HOTSWAP) return;
+    _system.__hotswapCallback = _callback;
 }

@@ -4,7 +4,7 @@
 /// cannot be found, this function will return `missingBindingName` (which is `"???"` by default).
 /// 
 /// N.B. This function is provided for basic binding naming and is suitable for debugging or
-///	  alpha-quality games. Please use the "Binding Icons" plug-in for a higher quality system.
+///      alpha-quality games. Please use the "Binding Icons" plug-in for a higher quality system.
 /// 
 /// @param {Enum.INPUT_VERB,Real} verbIndex
 /// @param {Real} [alternate=0]
@@ -119,10 +119,10 @@
 
 function InputVerbGetBindingName(_verbIndex, _alternate = 0, _playerIndex = 0, _missingBindingName = "???")
 {
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	var _forGamepad = InputPlayerUsingGamepad(_playerIndex);
-	return InputGetBindingName(InputBindingGet(_forGamepad, _verbIndex, _alternate, _playerIndex),
-							   _forGamepad,
-							   _missingBindingName);
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    var _forGamepad = InputPlayerUsingGamepad(_playerIndex);
+    return InputGetBindingName(InputBindingGet(_forGamepad, _verbIndex, _alternate, _playerIndex),
+                               _forGamepad,
+                               _missingBindingName);
 }

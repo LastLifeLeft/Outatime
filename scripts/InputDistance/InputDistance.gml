@@ -7,14 +7,14 @@
 
 function InputDistance(_clusterIndex, _playerIndex = 0)
 {
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	with(_playerArray[_playerIndex])
-	{	
-		__INPUT_VALIDATE_CLUSTER_INDEX
-		
-		return point_distance(0, 0, __clusterXArray[_clusterIndex], __clusterYArray[_clusterIndex]);
-	}
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    with(_playerArray[_playerIndex])
+    {    
+        __INPUT_VALIDATE_CLUSTER_INDEX
+        
+        return point_distance(0, 0, __clusterXArray[_clusterIndex], __clusterYArray[_clusterIndex]);
+    }
 }

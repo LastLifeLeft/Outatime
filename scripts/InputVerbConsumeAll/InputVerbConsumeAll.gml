@@ -8,18 +8,26 @@
 
 function InputVerbConsumeAll(_playerIndex = 0)
 {
-	static _playerArray = __InputSystemPlayerArray();
-	static _verbCount   = __InputSystem().__verbCount;
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	with(_playerArray[_playerIndex])
-	{
-		var _i = 0;
-		repeat(_verbCount)
-		{
-			InputVerbConsume(_i, _playerIndex);
-			++_i;
-		}
-	}
+    static _playerArray = __InputSystemPlayerArray();
+    static _verbCount   = __InputSystem().__verbCount;
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    with(_playerArray[_playerIndex])
+    {
+        var _i = 0;
+        repeat(_verbCount)
+        {
+            __InputVerbConsumeInternal(self, _i, false);
+            ++_i;
+        }
+        
+        //Update all clusters
+        var _i = 0;
+        repeat(_clusterCount)
+        {
+            __UpdateCluster(_i);
+            ++_i;
+        }
+    }
 }

@@ -6,5 +6,5 @@
 
 function InputVirtualCreate()
 {
-	return new __InputClassVirtualButton();
+    return new __InputClassVirtualButton();
 }

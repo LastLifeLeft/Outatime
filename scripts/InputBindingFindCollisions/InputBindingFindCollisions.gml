@@ -15,14 +15,14 @@
 
 function InputBindingFindCollisions(_forGamepad, _binding, _verbIndex, _playerIndex = 0, _alternate = 0)
 {
-	static _array = [];
-	array_resize(_array, 0);
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
+    static _array = [];
+    array_resize(_array, 0);
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
 
-	if (is_string(_binding)) _binding = ord(_binding);
-	
-	__InputPlugInExecuteCallbacks(INPUT_PLUG_IN_CALLBACK.FIND_BINDING_COLLISIONS, _array, _forGamepad, _binding, _verbIndex, _alternate, _playerIndex);
-	
-	return _array;
+    if (is_string(_binding)) _binding = ord(_binding);
+    
+    __InputPlugInExecuteCallbacks(INPUT_PLUG_IN_CALLBACK.FIND_BINDING_COLLISIONS, _array, _forGamepad, _binding, _verbIndex, _alternate, _playerIndex);
+    
+    return _array;
 }

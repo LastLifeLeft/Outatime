@@ -11,21 +11,21 @@
 
 function InputRepeat(_verbIndex, _playerIndex = 0, _delay = INPUT_REPEAT_DEFAULT_DELAY, _predelay = INPUT_REPEAT_DEFAULT_PREDELAY)
 {
-	static _system	  = __InputSystem();
-	static _playerArray = __InputSystemPlayerArray();
-	
-	__INPUT_VALIDATE_PLAYER_INDEX
-	
-	with(_playerArray[_playerIndex].__verbStateArray[_verbIndex])
-	{
-		if (not __held) return false;
-		
-		var _time = _system.__frame - __pressFrame;
-		if (_time == 0) return true;
-		
-		_time -= _predelay;
-		if (_time < 0) return false;
-		
-		return (floor(_time / _delay) > floor((_time - 1) / _delay));
-	}
+    static _system      = __InputSystem();
+    static _playerArray = __InputSystemPlayerArray();
+    
+    __INPUT_VALIDATE_PLAYER_INDEX
+    
+    with(_playerArray[_playerIndex].__verbStateArray[_verbIndex])
+    {
+        if (not __held) return false;
+        
+        var _time = _system.__frame - __pressFrame;
+        if (_time == 0) return true;
+        
+        _time -= _predelay;
+        if (_time < 0) return false;
+        
+        return (floor(_time / _delay) > floor((_time - 1) / _delay));
+    }
 }

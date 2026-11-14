@@ -8,13 +8,13 @@
 
 function InputPlugInGamepadBlock(_device)
 {
-	if (_device < 0)
-	{
-		__InputError("Cannot block device ", _device, " (can only block gamepads)");
-	}
-	
-	if (InputDeviceIsConnected(_device))
-	{
-		__InputPlugInExecuteCallbacks(INPUT_PLUG_IN_CALLBACK.GAMEPAD_DISCONNECTED, _device, false);
-	}
+    if (_device < 0)
+    {
+        __InputError("Cannot block device ", _device, " (can only block gamepads)");
+    }
+    
+    if (InputDeviceIsConnected(_device))
+    {
+        __InputPlugInExecuteCallbacks(INPUT_PLUG_IN_CALLBACK.GAMEPAD_DISCONNECTED, _device, false);
+    }
 }

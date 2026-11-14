@@ -6,10 +6,10 @@
 
 function InputMouseSetBlocked(_state)
 {
-	static _system = __InputSystem();
-	with(_system)
-	{
-		__pointerBlockedByUser = _state;
-		__pointerBlockedByUserThisFrame = _state;
-	}
+    static _system = __InputSystem();
+    with(_system)
+    {
+        __pointerBlockedByUser = _state;
+        __pointerBlockedByUserThisFrame = _state;
+    }
 }

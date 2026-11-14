@@ -8,32 +8,32 @@
 
 function InputDeviceIsConnected(_device)
 {
-	static _gamepadArray = __InputSystem().__gamepadArray;
-	
-	if (_device >= 0)
-	{
-		if (INPUT_BAN_GAMEPADS || (_device >= array_length(_gamepadArray))) return false;
-		
-		if (INPUT_ON_XBOX && INPUT_XBOX_SIMPLIFIED_USER_MODEL && (xboxone_user_for_pad(_device) != xboxone_get_activating_user()))
-		{
-			return false;
-		}
-		
-		var _struct = _gamepadArray[_device];
-		return ((_struct != undefined) && (not _struct.__blocked));
-	}
-	else if (_device == INPUT_KBM)
-	{
-		return (not INPUT_BAN_KBM);
-	}
-	else if (_device == INPUT_TOUCH)
-	{
-		return ((not INPUT_BAN_TOUCH) || (INPUT_ALLOW_TOUCH_ON_DESKTOP && INPUT_ON_DESKTOP));
-	}
-	else if (_device == INPUT_GENERIC_DEVICE)
-	{
-		return true;
-	}
-	
-	return false;
+    static _gamepadArray = __InputSystem().__gamepadArray;
+    
+    if (_device >= 0)
+    {
+        if (INPUT_BAN_GAMEPADS || (_device >= array_length(_gamepadArray))) return false;
+        
+        if (INPUT_ON_XBOX && INPUT_XBOX_SIMPLIFIED_USER_MODEL && (xboxone_user_for_pad(_device) != xboxone_get_activating_user()))
+        {
+            return false;
+        }
+        
+        var _struct = _gamepadArray[_device];
+        return ((_struct != undefined) && (not _struct.__blocked));
+    }
+    else if (_device == INPUT_KBM)
+    {
+        return (not INPUT_BAN_KBM);
+    }
+    else if (_device == INPUT_TOUCH)
+    {
+        return ((not INPUT_BAN_TOUCH) || (INPUT_ALLOW_TOUCH_ON_DESKTOP && INPUT_ON_DESKTOP));
+    }
+    else if (_device == INPUT_GENERIC_DEVICE)
+    {
+        return true;
+    }
+    
+    return false;
 }

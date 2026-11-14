@@ -4,6 +4,6 @@
 
 function InputMouseDeviceY()
 {
-	static _system = __InputSystem();
-	return _system.__pointerDeviceY;
+    static _system = __InputSystem();
+    return _system.__pointerDeviceY;
 }

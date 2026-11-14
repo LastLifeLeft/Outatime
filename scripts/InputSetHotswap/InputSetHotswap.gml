@@ -14,28 +14,28 @@
 
 function InputSetHotswap(_state)
 {
-	static _system = __InputSystem();
-	
-	if (INPUT_BAN_HOTSWAP) return;
-	
-	with(_system)
-	{
-		if (_state == __hotswap) return;
-		
-		if (_state)
-		{
-			var _i = 1;
-			repeat(INPUT_MAX_PLAYERS-1)
-			{
-				InputPlayerSetDevice(INPUT_NO_DEVICE, _i);
-				++_i;
-			}
-			
-			__hotswap = true;
-		}
-		else
-		{
-			__hotswap = false;
-		}
-	}
+    static _system = __InputSystem();
+    
+    if (INPUT_BAN_HOTSWAP) return;
+    
+    with(_system)
+    {
+        if (_state == __hotswap) return;
+        
+        if (_state)
+        {
+            var _i = 1;
+            repeat(INPUT_MAX_PLAYERS-1)
+            {
+                InputPlayerSetDevice(INPUT_NO_DEVICE, _i);
+                ++_i;
+            }
+            
+            __hotswap = true;
+        }
+        else
+        {
+            __hotswap = false;
+        }
+    }
 }
