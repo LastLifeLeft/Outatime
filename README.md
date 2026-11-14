@@ -1,4 +1,4 @@
-<h1 align="center">Outatime 0.0.1</h1>
+<h1 align="center">Outatime 0.0.2</h1>
 
 <p align="center">Have you ever thought of mis-using <a href="https://github.com/JujuAdams/iota">Iota</a> and <a href="https://codeberg.org/offalynne/Input">Input</a> to create rollback netcode?</p>
 
