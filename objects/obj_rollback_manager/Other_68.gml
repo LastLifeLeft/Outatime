@@ -43,7 +43,19 @@ for (var i = 0; i < array_length(_events); i++) {
 						});
 						_payload = undefined;
 						break;
-						
+
+					case PAYLOAD.ADVANTAGE:
+						// The sender's advantage over each player: ours is at our index
+						if (buffer_get_size(_payload) >= 2 * (local_player_index + 1)) {
+							buffer_seek(_payload, buffer_seek_start, 2 * local_player_index);
+							ds_queue_enqueue(message_queue, {
+								type: PAYLOAD.ADVANTAGE,
+								sender: _sender,
+								advantage: buffer_read(_payload, buffer_s16)
+							});
+						}
+						break;
+
 					case PAYLOAD.CHAT:
 						global.chat.add_message(_sender + ": " + buffer_read(_payload, buffer_string), MSG_TYPE.NORMAL);
 						break;

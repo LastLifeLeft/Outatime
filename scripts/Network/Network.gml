@@ -17,6 +17,9 @@ enum PAYLOAD
 	LOADOUT,		// response to PAYLOAD.MISSION: each player sends their loadout to load needed sprites
 	READY,			// sent once all the sprites are loaded
 	RANDOM,			// share the random seed.
+
+	// Rollback payloads:
+	ADVANTAGE,		// s16 per player: the sender's frames ahead of each (time sync)
 }
 
 // =============================================================================

@@ -62,6 +62,23 @@ connection_paused = false;
 pause_timer	   = 0;
 
 // =============================================================================
+// TIME SYNC
+// =============================================================================
+// The clock drops the time it could not run (a hitch, a dragged window) instead of catching up, so
+// the players drift apart. Every ROLLBACK_SYNC_EVERY ticks each one tells the others its advantage
+// over them (its frame minus the last frame it heard of theirs), averaged over that time since
+// heartbeats only come every 5 unchanged frames. The latency is in both sides' values
+// and cancels out of their difference; the one ahead skips half of it, one GameMaker frame at a time.
+// Apart from that, the clock holds while a rollback would need a frame older than ROLLBACK_DEPTH.
+remote_advantage	 = array_create(player_count, undefined);	// each player's advantage over us, as last sent
+local_advantage = array_create(player_count, undefined);	// ours over each, averaged over the last ROLLBACK_SYNC_EVERY ticks
+advantage_sum = array_create(player_count, 0);			// the samples of the window in progress, one per GameMaker frame
+advantage_samples = 0;
+next_advantage_frame = ROLLBACK_SYNC_EVERY;
+sync_after_frame = 0;										// no skip decided before it: the averages of a skip's time are stale
+skip_frames		  = 0;
+
+// =============================================================================
 // RNG STATE BUFFER
 // =============================================================================
 rng_state_buffer = [];
@@ -131,6 +148,29 @@ function send_heartbeat(_frame) {
 	var _buffer = buffer_create(4, buffer_fixed, 1);
 	buffer_write(_buffer, buffer_u32, _frame);
 	net_send(_buffer, PAYLOAD.HEARTBEAT);	// <— unified API
+	buffer_delete(_buffer);
+}
+
+/// The frame a player's input is known up to: its newest input, or a heartbeat since
+function known_frame(_player) {
+	return max(InputCircularBufferGetConfirmedFrame(_player), last_heard_frame[_player]);
+}
+
+/// Our frames ahead of a player: our frame minus the last frame it was on when we heard of it
+function advantage(_player) {
+	return global.absolute_frame - (last_heard_frame[_player] - ROLLBACK_INPUT_DELAY);
+}
+
+/// Tell the others our average advantage over each of them (s16 per player, our own entry 0)
+function send_advantage() {
+	var _buffer = buffer_create(2 * player_count, buffer_fixed, 1);
+	for (var p = 0; p < player_count; p++) {
+		local_advantage[p] = (p == local_player_index || advantage_samples == 0)? 0 : round(advantage_sum[p] / advantage_samples);
+		advantage_sum[p] = 0;
+		buffer_write(_buffer, buffer_s16, clamp(local_advantage[p], -32768, 32767));
+	}
+	advantage_samples = 0;
+	net_send(_buffer, PAYLOAD.ADVANTAGE);
 	buffer_delete(_buffer);
 }
 

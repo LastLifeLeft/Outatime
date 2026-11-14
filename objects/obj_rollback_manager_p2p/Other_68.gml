@@ -6,12 +6,12 @@ for (var i = 0; i < array_length(_events); i++) {
 	switch (_event.type) {
 		case "DISCONNECTED":
 			show_debug_message(debug_id + "Disconnected");
-			room_goto(rm_p2p_menu);
+			room_goto(rm_init);
 			break;
 			
 		case "PLAYER_LEFT":
 			show_debug_message(debug_id + _event.data + " left");
-			room_goto(rm_p2p_menu);
+			room_goto(rm_init);
 			break;
 			
 		case "RELAY":
@@ -43,6 +43,18 @@ for (var i = 0; i < array_length(_events); i++) {
 						});
 						_payload = undefined;
 						break;
+
+					case PAYLOAD.ADVANTAGE:
+						// The sender's advantage over each player: ours is at our index
+						if (buffer_get_size(_payload) >= 2 * (local_player_index + 1)) {
+							buffer_seek(_payload, buffer_seek_start, 2 * local_player_index);
+							ds_queue_enqueue(message_queue, {
+								type:	  PAYLOAD.ADVANTAGE,
+								sender:	_sender,
+								advantage: buffer_read(_payload, buffer_s16)
+							});
+						}
+						break;
 				}
 				
 				if (_payload != undefined) buffer_delete(_payload);
@@ -51,7 +63,7 @@ for (var i = 0; i < array_length(_events); i++) {
 			
 		case "LOBBY_CLOSED":
 			show_debug_message(debug_id + "Lobby closed");
-			room_goto(rm_p2p_menu);
+			room_goto(rm_init);
 			break;
 	}
 }
