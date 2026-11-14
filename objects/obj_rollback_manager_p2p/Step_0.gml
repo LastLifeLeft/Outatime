@@ -85,13 +85,13 @@ if (connection_paused)
 // =============================================================================
 // TIME SYNC
 // =============================================================================
-// Skip when we are ahead of a player by 2 frames or more, by both sides' averages
+// Skip when we are ahead of a player by 2 frames or more (a difference of 4), by both sides' averages
 if (skip_frames == 0 && global.absolute_frame >= sync_after_frame) {
 	for (var p = 0; p < player_count; p++) {
 		if (p == local_player_index || remote_advantage[p] == undefined || local_advantage[p] == undefined) continue;
 
 		var _difference = local_advantage[p] - remote_advantage[p];
-		if (_difference >= 2) skip_frames = max(skip_frames, min(_difference div 2, ROLLBACK_SYNC_MAX_SKIP));
+		if (_difference >= ROLLBACK_SYNC_MIN_DIFFERENCE) skip_frames = max(skip_frames, min(_difference div 2, ROLLBACK_SYNC_MAX_SKIP));
 		remote_advantage[p] = undefined;
 	}
 	if (skip_frames > 0) {
