@@ -4,8 +4,9 @@ for (var i = 0; i < ROLLBACK_DEPTH; i++) {
 	state_buffer[i] = undefined;
 }
 
-// Lifecycle tracking
-birth_frame = global.absolute_frame;
+// Lifecycle tracking: the first frame whose begin-of-tick state holds this instance. One created inside tick N
+// is first saved at the begin of N + 1, and a rollback to N destroys it so that the resimulation creates it again
+birth_frame = global.absolute_frame + (global.rollback_in_tick? 1 : 0);
 marked_for_destruction = false;
 destruction_frame = -1;
 

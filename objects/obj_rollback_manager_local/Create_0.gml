@@ -15,6 +15,7 @@ for (var i = 0; i < player_count; i++) {
 global.absolute_frame = 0;
 global.rollback_tick_frame = 0;
 global.rollbacking = 0; // Always 0 in local mode
+global.rollback_in_tick = false;
 
 // =============================================================================
 // INPUT: Input's Circular Buffer plug-in, seat p = Input player p
@@ -33,6 +34,7 @@ global.rollback_clock = new OutatimeClock();
 global.rollback_clock.SetUpdateFrequency(1000000 / ROLLBACK_TICK_DURATION);
 
 global.rollback_clock.AddBeginTickMethod(function() {
+	global.rollback_in_tick = true;
 	var _current_frame = global.absolute_frame;
 	
 	global.rollback_tick_frame = _current_frame;
@@ -52,4 +54,5 @@ global.rollback_clock.AddBeginTickMethod(function() {
 
 global.rollback_clock.AddEndTickMethod(function() {
 	global.absolute_frame++;
+	global.rollback_in_tick = false;
 });

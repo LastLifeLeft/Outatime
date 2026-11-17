@@ -29,6 +29,7 @@ show_debug_message(debug_id + "Local index: " + string(local_player_index));
 global.absolute_frame	= 0;
 global.rollbacking	   = 0;
 global.rollback_tick_frame = 0;
+global.rollback_in_tick	= false;
 resimulating			 = false;
 
 // =============================================================================
@@ -96,6 +97,7 @@ global.rollback_clock.SetUpdateFrequency(1000000 / ROLLBACK_TICK_DURATION);
 // ---- BEGIN TICK ----
 global.rollback_clock.AddBeginTickMethod(function()
 {
+	global.rollback_in_tick = true;
 	var _current_frame		= global.absolute_frame;
 	var _current_buffer_index = _current_frame % ROLLBACK_DEPTH;
 	
@@ -118,6 +120,7 @@ global.rollback_clock.AddBeginTickMethod(function()
 global.rollback_clock.AddEndTickMethod(function()
 {
 	global.absolute_frame++;
+	global.rollback_in_tick = false;
 });
 
 // =============================================================================
